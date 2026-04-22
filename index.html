@@ -46,8 +46,8 @@ function setup() {
     };
     rings.push(r);
 
-    // 1 in 2: duplicate as a sapphire ghost ring, slightly offset
-    if (i % 2 === 0) {
+    // 1 in 3: duplicate as a sapphire ghost ring, slightly offset
+    if (i % 3 === 0) {
       rings.push({
         ...r,
         cx: r.cx + random(-18, 18),
