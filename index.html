@@ -30,21 +30,29 @@
     border-color: rgba(255,255,255,0.6);
     color: #fff;
   }
-  #randomize { left: 20px; }
-  #less      { left: 130px; }
-  #more      { left: 200px; }
+  #randomize  { left: 20px; }
+  #less        { left: 130px; }
+  #more        { left: 200px; }
+  #autorotate  { left: 268px; }
+  #autorotate.active {
+    background: rgba(255,255,255,0.15);
+    border-color: rgba(255,255,255,0.5);
+  }
 </style>
 </head>
 <body>
 <button id="randomize" class="ctrl">randomize</button>
 <button id="less" class="ctrl">less</button>
 <button id="more" class="ctrl">more</button>
+<button id="autorotate" class="ctrl">auto rotate</button>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
 <script>
 const PARTICLES_PER_RING = 120;
 
 let rings = [];
 let densityMult = 1.0;
+let autoRotate = false;
+let autoRotateAngle = 0;
 
 function ringCount() {
   return floor(map(windowWidth, 320, 2560, 60, 240, true) * densityMult);
@@ -107,6 +115,11 @@ function setup() {
 function draw() {
   orbitControl();
   background(0, 0, 3, 18); // slow trail fade
+
+  if (autoRotate) {
+    autoRotateAngle += 0.003;
+    rotateY(autoRotateAngle);
+  }
 
   let t = frameCount * 0.001;
 
@@ -187,6 +200,11 @@ document.getElementById('randomize').addEventListener('click', () => {
       });
     }
   }
+});
+
+document.getElementById('autorotate').addEventListener('click', () => {
+  autoRotate = !autoRotate;
+  document.getElementById('autorotate').classList.toggle('active', autoRotate);
 });
 
 function rebuild() {
