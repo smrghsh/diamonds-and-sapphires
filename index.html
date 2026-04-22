@@ -23,7 +23,7 @@ function setup() {
   noStroke();
 
   for (let i = 0; i < NUM_RINGS; i++) {
-    rings.push({
+    let r = {
       radius:    random(40, 380),
       tiltX:     random(TWO_PI),
       tiltY:     random(TWO_PI),
@@ -33,16 +33,40 @@ function setup() {
       cz:        random(-600, 200),
       speed:     random(0.0003, 0.0012) * (random() > 0.5 ? 1 : -1),
       phase:     random(TWO_PI),
+      sapphire:  false,
       particles: Array.from({ length: PARTICLES_PER_RING }, (_, j) => ({
         angle:     (j / PARTICLES_PER_RING) * TWO_PI,
         size:      random(1.2, 3.8),
-        hue:       random() > 0.7 ? random(195, 230) : random(40, 60), // ice blue or pale gold
+        hue:       random() > 0.7 ? random(195, 230) : random(40, 60),
         sat:       random(0, 30),
         bri:       random(80, 100),
         flickerSpeed: random(0.02, 0.09),
         flickerPhase: random(TWO_PI),
       }))
-    });
+    };
+    rings.push(r);
+
+    // 1 in 20: duplicate as a sapphire ghost ring, slightly offset
+    if (i % 20 === 0) {
+      rings.push({
+        ...r,
+        cx: r.cx + random(-18, 18),
+        cy: r.cy + random(-18, 18),
+        cz: r.cz + random(-18, 18),
+        radius: r.radius + random(-8, 8),
+        sapphire: true,
+        phase: r.phase + random(0.05, 0.2),
+        particles: Array.from({ length: PARTICLES_PER_RING }, (_, j) => ({
+          angle:     (j / PARTICLES_PER_RING) * TWO_PI,
+          size:      random(1.4, 3.2),
+          hue:       random(210, 240), // sapphire blue
+          sat:       random(70, 95),
+          bri:       random(75, 100),
+          flickerSpeed: random(0.02, 0.09),
+          flickerPhase: random(TWO_PI),
+        }))
+      });
+    }
   }
 }
 
