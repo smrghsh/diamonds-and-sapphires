@@ -42,9 +42,9 @@ const PARTICLES_PER_RING = 120;
 
 let rings = [];
 
-function speedScale() {
-  // subtle variation: wider screens run slightly faster
-  return 0.7 + (windowWidth / 2560) * 0.6;
+function ringCount() {
+  // scale ring count with screen area — phones get ~60, wide monitors get ~240
+  return floor(map(windowWidth, 320, 2560, 60, 240, true));
 }
 
 function setup() {
@@ -53,7 +53,7 @@ function setup() {
   frameRate(60);
   noStroke();
 
-  for (let i = 0; i < NUM_RINGS; i++) {
+  for (let i = 0; i < ringCount(); i++) {
     let r = {
       radius:    random(40, 380),
       tiltX:     random(TWO_PI),
@@ -62,7 +62,7 @@ function setup() {
       cx:        random(-500, 500),
       cy:        random(-500, 500),
       cz:        random(-600, 200),
-      speed:     random(0.001, 0.004) * (random() > 0.5 ? 1 : -1) * speedScale(),
+      speed:     random(0.001, 0.004) * (random() > 0.5 ? 1 : -1),
       phase:     random(TWO_PI),
       sapphire:  false,
       particles: Array.from({ length: PARTICLES_PER_RING }, (_, j) => ({
@@ -140,7 +140,7 @@ function windowResized() {
 
 document.getElementById('randomize').addEventListener('click', () => {
   rings = [];
-  for (let i = 0; i < NUM_RINGS; i++) {
+  for (let i = 0; i < ringCount(); i++) {
     let r = {
       radius:    random(40, 380),
       tiltX:     random(TWO_PI),
